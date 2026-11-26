@@ -2,11 +2,11 @@
   "name": "staff-shift-scheduler",
   "version": "1.0.0",
   "description": "Staff Shift Scheduler - Cloud Computing project (Group 12)",
-  "main": "backend/server.js",
+  "main": "src/server.js",
   "scripts": {
-    "start": "node backend/server.js",
-    "provision": "node database/provision.js",
-    "provision:demo": "node database/provision.js --demo",
+    "start": "node src/server.js",
+    "provision": "node scripts/provision.js",
+    "provision:demo": "node scripts/provision.js --demo",
     "test": "node --test"
   },
   "engines": { "node": ">=20" },

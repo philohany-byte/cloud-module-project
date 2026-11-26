@@ -5,4 +5,4 @@ RUN npm install --omit=dev
 COPY . .
 EXPOSE 3000
 # Provision the (emulated) AWS resources, then start the API + frontend.
-CMD ["sh", "-c", "node database/provision.js --demo && node backend/server.js"]
+CMD ["sh", "-c", "node scripts/provision.js --demo && node src/server.js"]

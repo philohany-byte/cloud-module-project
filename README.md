@@ -30,63 +30,14 @@ Run `npm test` any time (needs no Docker). If Lambda does not start on your mach
 
 `npm run provision:demo` (and Docker) also creates four extra staff, all with password `12345`, so swaps can be tried: Ali Mohamed (Cashier), Sara Ibrahim (Cashier), Mona Khaled (Supervisor), Omar Youssef (Cashier + Supervisor), emails `ali@`, `sara@`, `mona@`, `omar@example.com`. Delete them from the *Staff & roles* tab if you do not want them. Demo staff are available Monday-Friday 08:00-18:00. The password length minimum is 5 characters to allow `12345`; raise it for real use.
 
-## Project structure
-```
-staff-shift-scheduler/
-├── frontend/                          # Presentation layer (plain HTML / CSS / JS)
-│   ├── index.html
-│   ├── styles.css
-│   └── app.js
-│
-├── backend/                           # Application layer (Express API, business rules)
-│   ├── server.js                      # starts the API and serves frontend/
-│   ├── config.js
-│   ├── shared/                        # auth, errors, validation, time helpers
-│   ├── aws/                           # audit.js (CloudWatch Logs), invoke.js (Lambda calls)
-│   ├── services/
-│   │   ├── staff-availability/        # Felopateer Hany
-│   │   │   ├── routes.js
-│   │   │   ├── service.js
-│   │   │   └── lambda/                # coverage-analysis function
-│   │   ├── shift-scheduling/          # Abdelrahman Ayman
-│   │   │   ├── routes.js
-│   │   │   ├── service.js
-│   │   │   └── ics.js                 # calendar export
-│   │   └── shift-swap/                # Yuwei Zhang
-│   │       ├── routes.js
-│   │       ├── service.js
-│   │       └── lambda/                # uncovered-shifts function
-│   └── test/
-│
-├── database/                          # Data layer (DynamoDB + AWS clients)
-│   ├── clients.js                     # AWS SDK clients (DynamoDB, S3, Lambda, IAM, CloudWatch)
-│   ├── db.js                          # DynamoDB helpers
-│   ├── provision.js                   # creates tables, bucket, log group, IAM role, Lambdas + seed data
-│   ├── staff-availability/repository.js
-│   ├── shift-scheduling/repository.js
-│   └── shift-swap/repository.js
-│
-├── docker-compose.yml
-├── Dockerfile
-├── package.json
-└── README.md
-```
-
 ## Architecture (three layers)
 | Layer | Where | What it does |
 |---|---|---|
-| Presentation | `frontend/` | HTML/CSS/JS pages; all data comes from the REST API |
-| Application | `backend/services/*/routes.js` + `service.js` | HTTP routes, validation, business rules, workflows |
-| Data | `database/` | DynamoDB repositories, AWS clients, provisioning; `backend/aws/` holds the Lambda call and CloudWatch audit helpers |
+| Presentation | `public/` | HTML/CSS/JS pages; all data comes from the REST API |
+| Application | `src/services/*/routes.js` + `service.js` | HTTP routes, validation, business rules, workflows |
+| Data | `src/services/*/repository.js`, `src/aws/` | DynamoDB access, S3, Lambda calls, CloudWatch logging |
 
-Each service has its own folder in `backend/services/` (routes, business logic, its Lambda) and a matching folder in `database/` (its repository). Services talk to each other only through the exported functions of `service.js` (for example the Swap service calls `scheduling.reassign`).
-
-## Who built what
-| Student | Service | Function 1 | Function 2 | Function 3 | Function 4 |
-|---|---|---|---|---|---|
-| Felopateer Hany | `staff-availability` | Login with user type | Manage employees and job roles | Manage availability | Analyse team availability coverage |
-| Abdelrahman Ayman | `shift-scheduling` | Create shifts with role requirements | Assign employees to shifts | View weekly schedule | - |
-| Yuwei Zhang | `shift-swap` | Request shift swap | Approve shift swap | Flag uncovered shifts | - |
+Each service lives in its own folder with its own routes, service logic and repository. Services talk to each other only through the exported functions of `service.js` (for example the Swap service calls `scheduling.reassign`).
 
 ## Service ownership and AWS usage
 | Student | Service | AWS services (3 each) | What each does |
