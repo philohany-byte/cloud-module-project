@@ -1,0 +1,25 @@
+{
+  "name": "staff-shift-scheduler",
+  "version": "1.0.0",
+  "description": "Staff Shift Scheduler - Cloud Computing project (Group 12)",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "provision": "node scripts/provision.js",
+    "provision:demo": "node scripts/provision.js --demo",
+    "test": "node --test"
+  },
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "@aws-sdk/client-cloudwatch-logs": "^3.600.0",
+    "@aws-sdk/client-dynamodb": "^3.600.0",
+    "@aws-sdk/client-iam": "^3.600.0",
+    "@aws-sdk/client-lambda": "^3.600.0",
+    "@aws-sdk/client-s3": "^3.600.0",
+    "@aws-sdk/lib-dynamodb": "^3.600.0",
+    "adm-zip": "^0.5.14",
+    "bcryptjs": "^2.4.3",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
