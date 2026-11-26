@@ -1,0 +1,21 @@
+services:
+  floci:                       # AWS emulator (DynamoDB, S3, Lambda, IAM, CloudWatch Logs)
+    image: floci/floci:latest
+    ports:
+      - "4566:4566"
+    environment:
+      FLOCI_HOSTNAME: floci
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock   # Floci runs Lambda functions in real containers
+
+  app:                         # Express API + static frontend
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      AWS_ENDPOINT_URL: http://floci:4566
+      AWS_REGION: us-east-1
+      JWT_SECRET: change-this-secret
+      USE_LAMBDA: "true"
+    depends_on:
+      - floci
